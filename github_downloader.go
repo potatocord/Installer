@@ -135,7 +135,7 @@ func InitGithubDownloader() {
 	re := regexp.MustCompile(`// (Vencord|Potatocord) (\w+)`)
 	match := re.FindSubmatch(b)
 	if match != nil {
-		InstalledHash = string(match[1])
+		InstalledHash = string(match[2])
 		Log.Debug("Existing hash is", InstalledHash)
 
 	} else {
@@ -154,7 +154,7 @@ func installLatestBuilds() (retErr error) {
 
 	downloadUrl := ""
 	for _, ass := range ReleaseData.Assets {
-		if ass.Name == "desktop.asar" {
+		if ass.Name == "desktop.asar" || ass.Name == "potatocord.asar" {
 			downloadUrl = ass.DownloadURL
 			break
 		}

@@ -11,7 +11,7 @@ import (
 	"potatocordinstaller/buildinfo"
 )
 
-const ReleaseUrl = "https://api.github.com/repos/potatocord/potatocord/releases/latest"
+const ReleaseUrl = "https://api.github.com/repos/potatocord/potatocord/releases/tags/devbuild"
 const ReleaseUrlFallback = "https://potatocord.dev/releases/potatocord"
 const InstallerReleaseUrl = "https://api.github.com/repos/potatocord/Installer/releases/latest"
 const InstallerReleaseUrlFallback = "https://potatocord.dev/releases/installer"
