@@ -8,12 +8,13 @@ package main
 
 import (
 	"errors"
-	"golang.org/x/sys/windows"
 	"os"
 	path "path/filepath"
 	"strings"
 	"sync"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 var windowsNames = map[string]string{
@@ -35,16 +36,19 @@ func ParseDiscord(p, branch string) *DiscordInstall {
 	}
 
 	isPatched := false
+	appVersion := ""
 	appPath := ""
 	for _, dir := range entries {
 		if dir.IsDir() && strings.HasPrefix(dir.Name(), "app-") {
+			version := dir.Name()[4:]
 			resources := path.Join(p, dir.Name(), "resources")
 			if !ExistsFile(resources) {
 				continue
 			}
-			app := path.Join(resources, "app")
-			if app > appPath {
-				appPath = app
+
+			if compareVersions(version, appVersion) > 0 {
+				appVersion = version
+				appPath = path.Join(resources, "app")
 				isPatched = ExistsFile(path.Join(resources, "_app.asar"))
 			}
 		}
@@ -90,7 +94,7 @@ func FindDiscords() []any {
 func PreparePatch(di *DiscordInstall) {
 	killLock.Lock()
 	defer killLock.Unlock()
-	
+
 	name := windowsNames[di.branch]
 	Log.Debug("Trying to kill", name)
 	pid := findProcessIdByName(name + ".exe")

@@ -188,6 +188,10 @@ func unpatchAppAsar(dir string, isSystemElectron bool) (errOut error) {
 	appAsarTmp := path.Join(dir, "app.asar.tmp")
 	_appAsar := path.Join(dir, "_app.asar")
 
+	if !ExistsFile(_appAsar) {
+		return errors.New("Original app.asar (_app.asar) not found at " + _appAsar + ". Cannot unpatch.")
+	}
+
 	var renamesDone [][]string
 	defer func() {
 		if errOut != nil && len(renamesDone) > 0 {
@@ -211,24 +215,25 @@ func unpatchAppAsar(dir string, isSystemElectron bool) (errOut error) {
 		err = CheckIfErrIsCauseItsBusyRn(err)
 		Log.Error(err.Error())
 		errOut = err
-	} else {
-		renamesDone = append(renamesDone, []string{appAsar, appAsarTmp})
+		return
 	}
+	renamesDone = append(renamesDone, []string{appAsar, appAsarTmp})
 
 	Log.Debug("Renaming", _appAsar, "to", appAsar)
 	if err := os.Rename(_appAsar, appAsar); err != nil {
 		err = CheckIfErrIsCauseItsBusyRn(err)
 		Log.Error(err.Error())
 		errOut = err
-	} else {
-		renamesDone = append(renamesDone, []string{_appAsar, appAsar})
+		return
 	}
+	renamesDone = append(renamesDone, []string{_appAsar, appAsar})
 
 	if isSystemElectron {
 		Log.Debug("Renaming", _appAsar+".unpacked", "to", appAsar+".unpacked")
 		if err := os.Rename(_appAsar+".unpacked", appAsar+".unpacked"); err != nil {
 			Log.Error(err.Error())
 			errOut = err
+			return
 		}
 	}
 	return

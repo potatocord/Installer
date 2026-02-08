@@ -10,6 +10,7 @@ import (
 	"errors"
 	"os"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 )
@@ -104,4 +105,19 @@ func CheckIfErrIsCauseItsBusyRn(err error) error {
 
 func Prepend[T any](slice []T, elems ...T) []T {
 	return append(elems, slice...)
+}
+
+func compareVersions(v1, v2 string) int {
+	s1 := strings.Split(v1, ".")
+	s2 := strings.Split(v2, ".")
+
+	for i := 0; i < len(s1) && i < len(s2); i++ {
+		n1, _ := strconv.Atoi(s1[i])
+		n2, _ := strconv.Atoi(s2[i])
+		if n1 != n2 {
+			return n1 - n2
+		}
+	}
+
+	return len(s1) - len(s2)
 }
