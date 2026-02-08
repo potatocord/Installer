@@ -1,6 +1,6 @@
 module potatocordinstaller
 
-go 1.20
+go 1.26
 
 require (
 	github.com/AllenDang/giu v0.6.2
