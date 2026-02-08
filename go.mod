@@ -1,4 +1,4 @@
-module vencordinstaller
+module potatocordinstaller
 
 go 1.20
 

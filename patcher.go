@@ -1,18 +1,20 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * Vencord Installer, a cross platform gui/cli app for installing Vencord
- * Copyright (c) 2023 Vendicated and Vencord contributors
+ * SPDX-License-Identifier: GPL-3.0
+ * Potatocord Installer, a cross platform gui/cli app for installing Potatocord
+ * Copyright (c) 2023 Potatocord and Vencord contributors
  */
 
 package main
 
 import (
 	"errors"
-	"github.com/ProtonMail/go-appdir"
 	"os"
 	"os/exec"
 	path "path/filepath"
 	"strings"
+
+	"github.com/ProtonMail/go-appdir"
 )
 
 var BaseDir string
@@ -23,18 +25,18 @@ func init() {
 		Log.Debug("Using VENCORD_USER_DATA_DIR")
 		BaseDir = dir
 	} else if dir = os.Getenv("DISCORD_USER_DATA_DIR"); dir != "" {
-		Log.Debug("Using DISCORD_USER_DATA_DIR/../VencordData")
-		BaseDir = path.Join(dir, "..", "VencordData")
+		Log.Debug("Using DISCORD_USER_DATA_DIR/../PotatocordData")
+		BaseDir = path.Join(dir, "..", "PotatocordData")
 	} else {
 		Log.Debug("Using UserConfig")
-		BaseDir = appdir.New("Vencord").UserConfig()
+		BaseDir = appdir.New("Potatocord").UserConfig()
 	}
 
 	if dir := os.Getenv("VENCORD_DIRECTORY"); dir != "" {
 		Log.Debug("Using VENCORD_DIRECTORY")
 		VencordDirectory = dir
 	} else {
-		VencordDirectory = path.Join(BaseDir, "vencord.asar")
+		VencordDirectory = path.Join(BaseDir, "potatocord.asar")
 	}
 }
 

@@ -1,22 +1,22 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * Vencord Installer, a cross platform gui/cli app for installing Vencord
- * Copyright (c) 2023 Vendicated and Vencord contributors
+ * Potatocord Installer, a cross platform gui/cli app for installing Potatocord
+ * Copyright (c) 2023 Potatocord and Vencord contributors
  */
 
 package main
 
 import (
 	"image/color"
-	"vencordinstaller/buildinfo"
+	"potatocordinstaller/buildinfo"
 )
 
-const ReleaseUrl = "https://api.github.com/repos/Vendicated/Vencord/releases/latest"
-const ReleaseUrlFallback = "https://vencord.dev/releases/vencord"
-const InstallerReleaseUrl = "https://api.github.com/repos/Vencord/Installer/releases/latest"
-const InstallerReleaseUrlFallback = "https://vencord.dev/releases/installer"
+const ReleaseUrl = "https://api.github.com/repos/potatocord/potatocord/releases/latest"
+const ReleaseUrlFallback = "https://potatocord.dev/releases/potatocord"
+const InstallerReleaseUrl = "https://api.github.com/repos/potatocord/Installer/releases/latest"
+const InstallerReleaseUrlFallback = "https://potatocord.dev/releases/installer"
 
-var UserAgent = "VencordInstaller/" + buildinfo.InstallerGitHash + " (https://github.com/Vencord/Installer)"
+var UserAgent = "PotatocordInstaller/" + buildinfo.InstallerGitHash + " (https://github.com/potatocord/Installer)"
 
 var (
 	DiscordGreen  = color.RGBA{R: 0x2D, G: 0x7C, B: 0x46, A: 0xFF}
