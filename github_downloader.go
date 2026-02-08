@@ -132,7 +132,7 @@ func InitGithubDownloader() {
 
 	Log.Debug("Found existing Vencord Install. Checking for hash...")
 
-	re := regexp.MustCompile(`// Vencord (\w+)`)
+	re := regexp.MustCompile(`// (Vencord|Potatocord) (\w+)`)
 	match := re.FindSubmatch(b)
 	if match != nil {
 		InstalledHash = string(match[1])
