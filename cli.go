@@ -3,7 +3,7 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
  * Potatocord Installer, a cross platform gui/cli app for installing Potatocord
- * Copyright (c) 2023 Potatocord and Vencord contributors
+ * Copyright (c) 2023 Potatocord and contributors
  */
 
 package main
@@ -103,7 +103,7 @@ func main() {
 			<-SelfUpdateCheckDoneChan
 			if IsSelfOutdated {
 				Log.Warn("Your installer is outdated.")
-				Log.Warn("To update, select the 'Update Vencord Installer' option to update, or run with --update-self")
+				Log.Warn("To update, select the 'Update Potatocord Installer' option to update, or run with --update-self")
 			}
 		}()
 

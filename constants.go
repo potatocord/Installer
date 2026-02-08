@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
  * Potatocord Installer, a cross platform gui/cli app for installing Potatocord
- * Copyright (c) 2023 Potatocord and Vencord contributors
+ * Copyright (c) 2023 Potatocord and contributors
  */
 
 package main

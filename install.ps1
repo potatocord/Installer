@@ -1,6 +1,6 @@
-$link = "https://github.com/Vencord/Installer/releases/latest/download/VencordInstallerCli.exe"
+$link = "https://github.com/potatocord/Installer/releases/latest/download/PotatocordInstallerCli.exe"
 
-$outfile = "$env:TEMP\VencordInstallerCli.exe"
+$outfile = "$env:TEMP\PotatocordInstallerCli.exe"
 
 Write-Output "Downloading installer to $outfile"
 

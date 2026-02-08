@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * Vencord Installer, a cross platform gui/cli app for installing Vencord
- * Copyright (c) 2023 Vendicated and Vencord contributors
+ * Potatocord Installer, a cross platform gui/cli app for installing Potatocord
+ * Copyright (c) 2023 Potatocord and contributors
  */
 
 package main
@@ -60,7 +60,7 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 		triedFallback := url == fallbackUrl
 
 		// GitHub has a very strict 60 req/h rate limit and some (mostly indian) isps block github for some reason.
-		// If that is the case, try our fallback at https://vencord.dev/releases/project
+		// If that is the case, try our fallback at https://potatocord.dev/releases/project
 		if isRateLimitedOrBlocked && !triedFallback {
 			Log.Error(fmt.Sprintf("Failed to fetch %s (status code %d). Trying fallback url %s", url, res.StatusCode, fallbackUrl))
 			return GetGithubRelease(fallbackUrl, fallbackUrl)
@@ -84,7 +84,7 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 func InitGithubDownloader() {
 	GithubDoneChan = make(chan bool, 1)
 
-	IsDevInstall = os.Getenv("VENCORD_DEV_INSTALL") == "1"
+	IsDevInstall = os.Getenv("POTATOCORD_DEV_INSTALL") == "1" || os.Getenv("VENCORD_DEV_INSTALL") == "1"
 	Log.Debug("Is Dev Install: ", IsDevInstall)
 	if IsDevInstall {
 		GithubDoneChan <- true
@@ -112,25 +112,25 @@ func InitGithubDownloader() {
 	}()
 
 	// either .asar file or directory with main.js file (in DEV)
-	VencordFile := VencordDirectory
+	PotatocordFile := PotatocordDirectory
 
-	stat, err := os.Stat(VencordFile)
+	stat, err := os.Stat(PotatocordFile)
 	if err != nil {
 		return
 	}
 
 	// dev
 	if stat.IsDir() {
-		VencordFile = path.Join(VencordFile, "main.js")
+		PotatocordFile = path.Join(PotatocordFile, "main.js")
 	}
 
 	// Check hash of installed version if exists
-	b, err := os.ReadFile(VencordFile)
+	b, err := os.ReadFile(PotatocordFile)
 	if err != nil {
 		return
 	}
 
-	Log.Debug("Found existing Vencord Install. Checking for hash...")
+	Log.Debug("Found existing Potatocord Install. Checking for hash...")
 
 	re := regexp.MustCompile(`// (Vencord|Potatocord) (\w+)`)
 	match := re.FindSubmatch(b)
@@ -177,15 +177,15 @@ func installLatestBuilds() (retErr error) {
 		retErr = err
 		return
 	}
-	out, err := os.OpenFile(VencordDirectory, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	out, err := os.OpenFile(PotatocordDirectory, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		Log.Error("Failed to create", VencordDirectory+":", err)
+		Log.Error("Failed to create", PotatocordDirectory+":", err)
 		retErr = err
 		return
 	}
 	read, err := io.Copy(out, res.Body)
 	if err != nil {
-		Log.Error("Failed to download to", VencordDirectory+":", err)
+		Log.Error("Failed to download to", PotatocordDirectory+":", err)
 		retErr = err
 		return
 	}
@@ -198,7 +198,7 @@ func installLatestBuilds() (retErr error) {
 		return
 	}
 
-	_ = FixOwnership(VencordDirectory)
+	_ = FixOwnership(PotatocordDirectory)
 
 	InstalledHash = LatestHash
 	return
