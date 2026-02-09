@@ -21,6 +21,8 @@ var BaseDir string
 var PotatocordDirectory string
 
 func init() {
+	detectDevMode()
+
 	if dir := os.Getenv("POTATOCORD_USER_DATA_DIR"); dir != "" {
 		Log.Debug("Using POTATOCORD_USER_DATA_DIR")
 		BaseDir = dir
@@ -43,6 +45,43 @@ func init() {
 		PotatocordDirectory = dir
 	} else {
 		PotatocordDirectory = path.Join(BaseDir, "potatocord.asar")
+	}
+}
+
+func detectDevMode() {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return
+	}
+
+	// Check for package.json in parent directory
+	pkgPath := path.Join(cwd, "..", "package.json")
+	content, err := os.ReadFile(pkgPath)
+	if err != nil {
+		return
+	}
+
+	// Check if it's the potatocord package
+	if strings.Contains(string(content), `"name": "potatocord"`) {
+		Log.Info("Detected Dev Environment")
+		abs, err := path.Abs("..")
+		if err != nil {
+			Log.Error("Failed to get absolute path", err)
+			return
+		}
+
+		os.Setenv("POTATOCORD_DEV_INSTALL", "1")
+		// maintain compatibility with Vencord env vars if needed
+		os.Setenv("VENCORD_DEV_INSTALL", "1")
+
+		if os.Getenv("POTATOCORD_USER_DATA_DIR") == "" && os.Getenv("VENCORD_USER_DATA_DIR") == "" {
+			os.Setenv("POTATOCORD_USER_DATA_DIR", abs)
+		}
+
+		if os.Getenv("POTATOCORD_DIRECTORY") == "" && os.Getenv("VENCORD_DIRECTORY") == "" {
+			// In potatocord, entries are in dist/patcher.js
+			os.Setenv("POTATOCORD_DIRECTORY", path.Join(abs, "dist", "patcher.js"))
+		}
 	}
 }
 
