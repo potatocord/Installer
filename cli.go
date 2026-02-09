@@ -26,7 +26,7 @@ var interactive = false
 
 func isValidBranch(branch string) bool {
 	switch branch {
-	case "", "stable", "ptb", "canary", "auto":
+	case "", "stable", "ptb", "canary", "development", "auto":
 		return true
 	default:
 		return false
