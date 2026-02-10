@@ -15,6 +15,8 @@ const ReleaseUrl = "https://api.github.com/repos/potatocord/potatocord/releases/
 const ReleaseUrlFallback = "https://potatocord.dev/releases/potatocord"
 const InstallerReleaseUrl = "https://api.github.com/repos/potatocord/Installer/releases/latest"
 const InstallerReleaseUrlFallback = "https://potatocord.dev/releases/installer"
+const BuildsApiUrl = "https://api.github.com/repos/potatocord/builds/commits/main"
+const BuildsRawUrl = "https://github.com/potatocord/builds/raw/main"
 
 var UserAgent = "PotatocordInstaller/" + buildinfo.InstallerGitHash + " (https://github.com/potatocord/Installer)"
 

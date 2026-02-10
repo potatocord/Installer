@@ -28,6 +28,10 @@ type GithubRelease struct {
 	} `json:"assets"`
 }
 
+type GithubCommit struct {
+	Sha string `json:"sha"`
+}
+
 var ReleaseData GithubRelease
 var GithubError error
 var GithubDoneChan chan bool
@@ -81,6 +85,45 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 	return &data, nil
 }
 
+func GetBuildsRepoRelease() (*GithubRelease, error) {
+	Log.Debug("Fetching latest commit from builds repo", BuildsApiUrl)
+
+	req, err := http.NewRequest("GET", BuildsApiUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", UserAgent)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode >= 300 {
+		return nil, errors.New("Builds repo returned " + res.Status)
+	}
+
+	var commit GithubCommit
+	if err = json.NewDecoder(res.Body).Decode(&commit); err != nil {
+		return nil, err
+	}
+
+	return &GithubRelease{
+		Name:    "DevBuild " + commit.Sha[:7],
+		TagName: "devbuild",
+		Assets: []struct {
+			Name        string `json:"name"`
+			DownloadURL string `json:"browser_download_url"`
+		}{
+			{
+				Name:        "potatocord.asar",
+				DownloadURL: BuildsRawUrl + "/potatocord.asar",
+			},
+		},
+	}, nil
+}
+
 func InitGithubDownloader() {
 	GithubDoneChan = make(chan bool, 1)
 
@@ -98,6 +141,11 @@ func InitGithubDownloader() {
 		}()
 
 		data, err := GetGithubRelease(ReleaseUrl, ReleaseUrlFallback)
+		if err != nil {
+			Log.Warn("Failed to fetch GitHub Release, trying builds repo fallback:", err)
+			data, err = GetBuildsRepoRelease()
+		}
+
 		if err != nil {
 			GithubError = err
 			return
