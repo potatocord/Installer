@@ -12,11 +12,11 @@ import (
 )
 
 const ReleaseUrl = "https://api.github.com/repos/potatocord/potatocord/releases/tags/devbuild"
-const ReleaseUrlFallback = "https://potatocord.dev/releases/potatocord"
+const ReleaseUrlFallback = ReleaseUrl
 const InstallerReleaseUrl = "https://api.github.com/repos/potatocord/Installer/releases/latest"
-const InstallerReleaseUrlFallback = "https://potatocord.dev/releases/installer"
+const InstallerReleaseUrlFallback = InstallerReleaseUrl
 const BuildsApiUrl = "https://api.github.com/repos/potatocord/builds/commits/main"
-const BuildsRawUrl = "https://github.com/potatocord/builds/raw/main"
+const BuildsRawUrl = "https://raw.githubusercontent.com/potatocord/builds/main"
 
 var UserAgent = "PotatocordInstaller/" + buildinfo.InstallerGitHash + " (https://github.com/potatocord/Installer)"
 
