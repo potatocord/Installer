@@ -88,29 +88,27 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 func GetBuildsRepoRelease() (*GithubRelease, error) {
 	Log.Debug("Fetching latest commit from builds repo", BuildsApiUrl)
 
+	name := "DevBuild Unknown"
+
 	req, err := http.NewRequest("GET", BuildsApiUrl, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("User-Agent", UserAgent)
+	if err == nil {
+		req.Header.Set("User-Agent", UserAgent)
 
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
+		res, err := http.DefaultClient.Do(req)
+		if err == nil {
+			defer res.Body.Close()
 
-	if res.StatusCode >= 300 {
-		return nil, errors.New("Builds repo returned " + res.Status)
-	}
-
-	var commit GithubCommit
-	if err = json.NewDecoder(res.Body).Decode(&commit); err != nil {
-		return nil, err
+			if res.StatusCode < 300 {
+				var commit GithubCommit
+				if err = json.NewDecoder(res.Body).Decode(&commit); err == nil {
+					name = "DevBuild " + commit.Sha[:7]
+				}
+			}
+		}
 	}
 
 	return &GithubRelease{
-		Name:    "DevBuild " + commit.Sha[:7],
+		Name:    name,
 		TagName: "devbuild",
 		Assets: []struct {
 			Name        string `json:"name"`
