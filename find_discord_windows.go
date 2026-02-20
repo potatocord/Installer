@@ -128,7 +128,7 @@ func CheckScuffedInstall() bool {
 	username := os.Getenv("USERNAME")
 	programData := os.Getenv("PROGRAMDATA")
 	for _, discordName := range windowsNames {
-		if ExistsFile(path.Join(programData, username, discordName)) || ExistsFile(path.Join(programData, username, discordName)) {
+		if ExistsFile(path.Join(programData, username, discordName)) {
 			HandleScuffedInstall()
 			return true
 		}

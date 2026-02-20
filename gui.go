@@ -140,7 +140,12 @@ func handleUnpatch() {
 }
 
 func handleOpenAsar() {
-	if acceptedOpenAsar || getChosenInstall().IsOpenAsar() {
+	choice := getChosenInstall()
+	if choice == nil {
+		return
+	}
+
+	if acceptedOpenAsar || choice.IsOpenAsar() {
 		handleOpenAsarConfirmed()
 		return
 	}
